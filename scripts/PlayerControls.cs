@@ -142,8 +142,9 @@ public class PlayerControls : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == " powerUp")
+        if(collision.gameObject.tag == "powerUp")
         {
+            
            Destroy(collision.gameObject);
         }
     }
