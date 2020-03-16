@@ -63,6 +63,7 @@ public class PlayerControls : MonoBehaviour
         {
             shootDirection = new Vector3(xRotationInput, 0, yRotationInput);
             shootDirection.Normalize();
+            
         }
 
         //deadzone on joysticks
@@ -122,14 +123,16 @@ public class PlayerControls : MonoBehaviour
                     bulletSpawn.startDirection = shootDirection;
                     Physics.IgnoreCollision(bulletSpawn.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
                     //second
-                    BulletController bulletSpawn2 = Instantiate(projectile, (spawner.transform.position + new Vector3(0.5f,0,0)), (Quaternion.identity)).GetComponent<BulletController>();
+                    BulletController bulletSpawn2 = Instantiate(projectile, (spawner.transform.position), (Quaternion.identity)).GetComponent<BulletController>();
                     bulletSpawn2.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    bulletSpawn2.startDirection = shootDirection/* + new Vector3(0,0,.1f) -> changes the direction the bullet fires(aim sligtly left)*/;
+                    shootDirection = Quaternion.AngleAxis(20, Vector3.up) * shootDirection;
+                    bulletSpawn2.startDirection = shootDirection;
                     Physics.IgnoreCollision(bulletSpawn2.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
                     //third
-                    BulletController bulletSpawn3 = Instantiate(projectile, (spawner.transform.position + new Vector3(-0.5f, 0, 0)), Quaternion.identity).GetComponent<BulletController>();
+                    BulletController bulletSpawn3 = Instantiate(projectile, (spawner.transform.position), Quaternion.identity).GetComponent<BulletController>();
                     bulletSpawn3.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    bulletSpawn3.startDirection = shootDirection /*+ new Vector3(0, 0, .1f)-> changes the direction the bullet fires(aim slightly right)*/;
+                    shootDirection = Quaternion.AngleAxis(-40, Vector3.up) * shootDirection;
+                    bulletSpawn3.startDirection = shootDirection;
                     Physics.IgnoreCollision(bulletSpawn3.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
                     break;
             }
