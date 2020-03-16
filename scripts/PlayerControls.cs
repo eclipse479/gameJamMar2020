@@ -16,11 +16,14 @@ public class PlayerControls : MonoBehaviour
     public int playerNumber;
     public float maxShootingTimer = 3;
     float shootingTimer;
+    private Vector3 shootDirection;
     public GameObject projectile;
     public Transform spawner;
+    Rigidbody body;
     // Start is called before the first frame update
     void Start()
     {
+        body = gameObject.GetComponent<Rigidbody>();
         shootingTimer = maxShootingTimer;
     }
 
@@ -44,6 +47,14 @@ public class PlayerControls : MonoBehaviour
         }
         xRotationInput =  XCI.GetAxis(XboxAxis.RightStickX,(XboxController)playerNumber);
         yRotationInput =  XCI.GetAxis(XboxAxis.RightStickY,(XboxController)playerNumber);
+        
+        
+        if (!(Mathf.Approximately(xRotationInput, 0.0f) && Mathf.Approximately(yRotationInput, 0.0f)))
+        {
+            shootDirection = new Vector3(xRotationInput, 0, yRotationInput);
+            shootDirection.Normalize();
+        }
+
         //deadzone on joysticks
         if (xRotationInput < 0.1f && xRotationInput > -0.1f)
             xRotationInput = 0;
@@ -59,12 +70,15 @@ public class PlayerControls : MonoBehaviour
         //shooting timer count
         if (shootingTimer < maxShootingTimer)
         shootingTimer += Time.deltaTime;
+
+        body.velocity = new Vector3(0, 0, 0);
     }
 
     void shootProjectile()
     {
-        Vector3 projectileSpawnPoint = new Vector3((spawner.transform.position.x), (spawner.transform.position.y), spawner.transform.position.z);
-        Instantiate(projectile, projectileSpawnPoint,transform.rotation);
+        BulletController bulletSpawn = Instantiate(projectile, spawner.transform.position, Quaternion.identity).GetComponent<BulletController>();
+        bulletSpawn.startDirection = shootDirection;
+        Physics.IgnoreCollision(bulletSpawn.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         shootingTimer = 0;
     }
 
