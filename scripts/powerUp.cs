@@ -17,11 +17,7 @@ public class powerUp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < 100; i++)
-        {
         rand = Random.Range(0, 4);
-            Debug.Log(rand);
-        }
         switch (rand)
         {
             case 0:
