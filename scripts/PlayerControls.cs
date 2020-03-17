@@ -144,7 +144,8 @@ public class PlayerControls : MonoBehaviour
     {
         if(collision.gameObject.tag == "powerUp")
         {
-            
+           powerUp newpower = collision.gameObject.GetComponent<powerUp>();
+           currentBullet = (bulletType)newpower.currentPower;
            Destroy(collision.gameObject);
         }
     }
