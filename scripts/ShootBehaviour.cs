@@ -6,7 +6,6 @@ public class ShootBehaviour : MonoBehaviour
 {
     [SerializeField]
     private GameObject bulletPrefab;
-
     private Vector3 shootDirection;
     private float shootRate = 0.5f;
     private float shootTimer;
@@ -31,10 +30,9 @@ public class ShootBehaviour : MonoBehaviour
         shootTimer += Time.deltaTime;
         if (shootTimer > shootRate)
         {
-            if (!Mathf.Approximately(XCI.GetAxisRaw(XboxAxis.RightTrigger, XboxController.All), 0.0f) || Input.GetKey(KeyCode.Space))
+            if (!Mathf.Approximately(XCI.GetAxisRaw(XboxAxis.RightTrigger, XboxController.All), 0.0f))
             {
-                //StartCoroutine(ShootThree());
-                ExplosiveShot();
+                StartCoroutine(ShootThree());
                 shootTimer = 0f;
             }
         }
@@ -48,13 +46,5 @@ public class ShootBehaviour : MonoBehaviour
             bulletSpawn.startDirection = shootDirection;
             yield return new WaitForSeconds(0.1f);
         }
-    }
-
-    void ExplosiveShot()
-    {
-        BulletController bulletSpawn = Instantiate(bulletPrefab, transform.position, Quaternion.identity).GetComponent<BulletController>();
-        bulletSpawn.startDirection = shootDirection;
-        bulletSpawn.speed = 500f;
-        bulletSpawn.explosive = true;
     }
 }
